@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Requests</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Persian Datepicker (Jalali) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker@0.6.4/dist/jalalidatepicker.min.css" />
+    <!-- html2canvas for JPG export -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker@0.6.4/dist/jalalidatepicker.min.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>لیست سفارش ها</h1>
+      <nav class="tabs">
+        <button id="tab-form" class="tab active" data-target="#view-form">فرم</button>
+        <button id="tab-list" class="tab" data-target="#view-list">لیست</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Form View -->
+      <section id="view-form" class="view active">
+        <form id="request-form">
+          <div class="grid">
+            <label>
+              <span>اسم کامل مشتری</span>
+              <input type="text" id="customerName" required />
+            </label>
+            <label>
+              <span>شماره تلفن همراه</span>
+              <input type="tel" id="customerPhone" required />
+            </label>
+            <label>
+              <span>ایمیل (اختیاری)</span>
+              <input type="email" id="customerEmail" />
+            </label>
+            <label class="span-2">
+              <span>آدرس</span>
+              <input type="text" id="customerAddress" required />
+            </label>
+            <label>
+              <span>کد پستی</span>
+              <input type="text" id="postalCode" required />
+            </label>
+            <label class="span-2">
+              <span>درخواست مشتری</span>
+              <textarea id="customerRequest" rows="3" required></textarea>
+            </label>
+            <label>
+              <span>نام بافنده</span>
+              <input type="text" id="employee" required />
+            </label>
+            <label>
+              <span>تاریخ درخواست</span>
+              <input type="text" id="requestDateJalali" data-jdp required placeholder="YYYY-MM-DD" />
+              <input type="hidden" id="requestDate" />
+            </label>
+            <label>
+              <span>هزینه (تومن)</span>
+              <input type="number" id="price" step="0.01" min="0" required />
+            </label>
+            <label>
+              <span>تاریخ تحویل</span>
+              <input type="text" id="deliveryTimeJalali" data-jdp required placeholder="YYYY-MM-DD" />
+              <input type="hidden" id="deliveryTime" />
+            </label>
+            <label>
+              <span>وضعیت کار</span>
+              <select id="requestStatus" required>
+                <option value="pending">در انتظار</option>
+                <option value="in_progress">درحال انجام</option>
+                <option value="done">انجام شده</option>
+              </select>
+            </label>
+            <div id="receiptWrap" class="span-2 hidden">
+              <label class="file-label">
+                <span>آپلود رسید (عکس یا پی دی اف)</span>
+                <input type="file" id="receiptFile" accept="image/*,.pdf" />
+              </label>
+              <div id="receiptPreview" class="receipt-preview hidden"></div>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="primary">ذخیره در لیست</button>
+            <button type="reset" class="ghost">پاک کردن</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- List View -->
+      <section id="view-list" class="view">
+        <div class="list-actions">
+          <button id="export-list-jpg" class="secondary">خروجی به صورت عکس</button>
+          <button id="clear-all" class="ghost">پاک کردن همه</button>
+        </div>
+        <div id="list-container">
+          <table id="requests-table">
+            <thead>
+              <tr>
+                <th>مشتری</th>
+                <th>شماره </th>
+                <th>وضعیت</th>
+                <th>هزینه</th>
+                <th>تاریخ</th>
+                <th>اکشن ها</th>
+              </tr>
+            </thead>
+            <tbody id="requests-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Hidden template for single entry export -->
+    <template id="card-template">
+      <div class="export-card">
+        <h2>درخواست بافت</h2>
+        <div class="card-grid">
+          <div><strong>مشتری:</strong> <span data-key="customerName"></span></div>
+          <div><strong>شماره:</strong> <span data-key="customerPhone"></span></div>
+          <div><strong>ایمیل:</strong> <span data-key="customerEmail"></span></div>
+          <div class="span-2"><strong>آدرس:</strong> <span data-key="customerAddress"></span></div>
+          <div><strong>کد پستی:</strong> <span data-key="postalCode"></span></div>
+          <div class="span-2"><strong>درخواست:</strong> <span data-key="customerRequest"></span></div>
+          <div><strong>بافنده:</strong> <span data-key="employee"></span></div>
+          <div><strong>تاریخ:</strong> <span data-key="requestDate"></span></div>
+          <div><strong>هزینه:</strong> $<span data-key="price"></span></div>
+          <div><strong>تحویل:</strong> <span data-key="deliveryTime"></span></div>
+          <div><strong>وضعیت:</strong> <span data-key="requestStatus"></span></div>
+        </div>
+      </div>
+    </template>
+  </body>
+  </html>
+
+
